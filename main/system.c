@@ -73,6 +73,9 @@ static void _init_system(SystemModule* module) {
     EMC2101_set_fan_speed(0.75);
     vTaskDelay(500 / portTICK_RATE_MS);
 
+    //check for INA260
+    INA260_check();
+
     //oled
     if (!OLED_init()) {
         ESP_LOGI(TAG, "OLED init failed!");
@@ -93,7 +96,6 @@ static void _update_hashrate(SystemModule* module){
         }
 
         float power = INA260_read_power() / 1000;
-
         float efficiency = power / (module->current_hashrate/1000.0);
 
         OLED_clearLine(0);

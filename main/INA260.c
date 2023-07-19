@@ -12,6 +12,9 @@
 #define I2C_MASTER_RX_BUF_DISABLE   0                          /*!< I2C master doesn't need buffer */
 #define I2C_MASTER_TIMEOUT_MS       1000
 
+//global INA260 variables
+static bool has_INA260 = false;
+
 //static const char *TAG = "INA260.c";
 
 /**
@@ -33,8 +36,23 @@ static esp_err_t register_read(uint8_t reg_addr, uint8_t *data, size_t len) {
 //     return ret;
 // }
 
+bool INA260_check(void) {
+    //check the INA260 manf ID
+    uint8_t data[2];
+    if (register_read(INA260_REG_MFG_UID, data, 2) != ESP_OK) {
+        has_INA260 = false;
+        return false;
+    }
+    has_INA260 = true;
+    return true;
+}
+
 float INA260_read_current(void) {
   uint8_t data[2];
+
+  if (!has_INA260) {
+      return 0;
+  }
 
   ESP_ERROR_CHECK(register_read(INA260_REG_CURRENT, data, 2));
   //ESP_LOGI(TAG, "Raw Current = %02X %02X", data[1], data[0]);
@@ -45,6 +63,10 @@ float INA260_read_current(void) {
 float INA260_read_voltage(void) {
     uint8_t data[2];
 
+    if (!has_INA260) {
+      return 0;
+    }
+
     ESP_ERROR_CHECK(register_read(INA260_REG_BUSVOLTAGE, data, 2));
     //ESP_LOGI(TAG, "Raw Voltage = %02X %02X", data[1], data[0]);
 
@@ -53,6 +75,10 @@ float INA260_read_voltage(void) {
 
 float INA260_read_power(void) {
     uint8_t data[2];
+
+    if (!has_INA260) {
+      return 0;
+    }
 
     ESP_ERROR_CHECK(register_read(INA260_REG_POWER, data, 2));
     //ESP_LOGI(TAG, "Raw Power = %02X %02X", data[1], data[0]);
