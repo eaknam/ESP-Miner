@@ -25,13 +25,14 @@ void ASIC_result_task(void * pvParameters)
         uint32_t first_nonce = 0;
 
         asic_result *asic_result = (*GLOBAL_STATE->ASIC_FUNCTIONS.receive_work_fn)();
-        uint8_t job_id = asic_result->job_id;
-        uint32_t nonce = asic_result->nonce;
-
 
         if(asic_result == NULL){
             continue;
         }
+
+        uint8_t job_id = asic_result->job_id;
+        uint32_t nonce = asic_result->nonce;
+
 
         uint8_t rx_job_id = job_id & 0xfc;
         uint8_t rx_midstate_index = job_id & 0x03;
