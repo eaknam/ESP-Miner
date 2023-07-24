@@ -25,11 +25,11 @@ static GlobalState GLOBAL_STATE = {
         .frequency_value = BM1397_FREQUENCY
     },
     .ASIC_FUNCTIONS = {
-        .init = BM1397_init,
+        .init_fn = BM1397_init,
         .receive_work_fn = BM1397_receive_work,
-        .set_max_baud = BM1397_set_max_baud,
-        .set_difficulty_mask = BM1397_set_job_difficulty_mask,
-        .send_work = BM1397_send_work
+        .set_max_baud_fn = BM1397_set_max_baud,
+        .set_difficulty_mask_fn = BM1397_set_job_difficulty_mask,
+        .send_work_fn = BM1397_send_work
     }
 };
 
@@ -77,7 +77,7 @@ void app_main(void)
 
     SERIAL_init();
 
-    (*GLOBAL_STATE.ASIC_FUNCTIONS.init)(GLOBAL_STATE.POWER_MANAGEMENT_MODULE.frequency_value);
+    (*GLOBAL_STATE.ASIC_FUNCTIONS.init_fn)(GLOBAL_STATE.POWER_MANAGEMENT_MODULE.frequency_value);
 
     //set the startup_done flag
     GLOBAL_STATE.SYSTEM_MODULE.startup_done = true;

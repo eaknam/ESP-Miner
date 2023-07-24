@@ -30,7 +30,7 @@ void ASIC_task(void * pvParameters)
 
 
 
-    int baud = (*GLOBAL_STATE->ASIC_FUNCTIONS.set_max_baud)();
+    int baud = (*GLOBAL_STATE->ASIC_FUNCTIONS.set_max_baud_fn)();
     SERIAL_set_baud(baud);
 
     SYSTEM_notify_mining_started(&GLOBAL_STATE->SYSTEM_MODULE);
@@ -41,7 +41,7 @@ void ASIC_task(void * pvParameters)
 
         if(next_bm_job->pool_diff != GLOBAL_STATE->stratum_difficulty){
             ESP_LOGI(TAG, "New difficulty %d", next_bm_job->pool_diff);
-            (*GLOBAL_STATE->ASIC_FUNCTIONS.set_difficulty_mask)(next_bm_job->pool_diff);
+            (*GLOBAL_STATE->ASIC_FUNCTIONS.set_difficulty_mask_fn)(next_bm_job->pool_diff);
             GLOBAL_STATE->stratum_difficulty = next_bm_job->pool_diff;
         }
 
@@ -79,7 +79,7 @@ void ASIC_task(void * pvParameters)
 
 
 
-        (*GLOBAL_STATE->ASIC_FUNCTIONS.send_work)(&job);  //send the job to the ASIC
+        (*GLOBAL_STATE->ASIC_FUNCTIONS.send_work_fn)(&job);  //send the job to the ASIC
 
         //Time to execute the above code is ~0.3ms
         vTaskDelay((BM1397_FULLSCAN_MS - 0.3 ) / portTICK_RATE_MS);

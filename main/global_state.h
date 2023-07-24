@@ -13,11 +13,11 @@
 #define STRATUM_USER CONFIG_STRATUM_USER
 
 typedef struct {
-    void (*init)(u_int64_t);
+    void (*init_fn)(u_int64_t);
     asic_result * (*receive_work_fn)(void);
-    int (*set_max_baud)(void);
-    void (*set_difficulty_mask)(int);
-    void (*send_work)(job_packet *job);
+    int (*set_max_baud_fn)(void);
+    void (*set_difficulty_mask_fn)(int);
+    void (*send_work_fn)(job_packet *job);
 } AsicFunctions;
 
 typedef struct  {
