@@ -24,12 +24,19 @@ static GlobalState GLOBAL_STATE = {
         .frequency_multiplier = 1,
         .frequency_value = BM1397_FREQUENCY
     },
+    // .ASIC_FUNCTIONS = {
+    //     .init_fn = BM1397_init,
+    //     .receive_work_fn = BM1397_receive_work,
+    //     .set_max_baud_fn = BM1397_set_max_baud,
+    //     .set_difficulty_mask_fn = BM1397_set_job_difficulty_mask,
+    //     .send_work_fn = BM1397_send_work
+    // }
     .ASIC_FUNCTIONS = {
-        .init_fn = BM1397_init,
-        .receive_work_fn = BM1397_receive_work,
-        .set_max_baud_fn = BM1397_set_max_baud,
-        .set_difficulty_mask_fn = BM1397_set_job_difficulty_mask,
-        .send_work_fn = BM1397_send_work
+        .init_fn = BM1366_init,
+        .receive_work_fn = BM1366_receive_work,
+        .set_max_baud_fn = BM1366_set_max_baud,
+        .set_difficulty_mask_fn = BM1366_set_job_difficulty_mask,
+        .send_work_fn = BM1366_send_work
     }
 };
 

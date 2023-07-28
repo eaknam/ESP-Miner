@@ -31,8 +31,8 @@ void ASIC_task(void * pvParameters)
 
 
 
-    // int baud = (*GLOBAL_STATE->ASIC_FUNCTIONS.set_max_baud_fn)();
-    // SERIAL_set_baud(baud);
+    int baud = (*GLOBAL_STATE->ASIC_FUNCTIONS.set_max_baud_fn)();
+    SERIAL_set_baud(baud);
 
     SYSTEM_notify_mining_started(&GLOBAL_STATE->SYSTEM_MODULE);
     ESP_LOGI(TAG, "ASIC Ready!");
@@ -47,9 +47,10 @@ void ASIC_task(void * pvParameters)
         }
 
 
-        (*GLOBAL_STATE->ASIC_FUNCTIONS.send_work_fn)(GLOBAL_STATE, &next_bm_job);  //send the job to the ASIC
+        (*GLOBAL_STATE->ASIC_FUNCTIONS.send_work_fn)(GLOBAL_STATE, next_bm_job);  //send the job to the ASIC
 
         //Time to execute the above code is ~0.3ms
+        //vTaskDelay((BM1397_FULLSCAN_MS - 0.3 ) / portTICK_RATE_MS);
         vTaskDelay((10000 ) / portTICK_RATE_MS);
 
     }

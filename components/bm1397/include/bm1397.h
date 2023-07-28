@@ -2,26 +2,10 @@
 #define BM1397_H_
 
 #include "driver/gpio.h"
+#include "mining.h"
 
-#define BM1397_RST_PIN  GPIO_NUM_1
-
-
-#define TYPE_JOB 0x20
-#define TYPE_CMD 0x40
-
-#define GROUP_SINGLE 0x00
-#define GROUP_ALL 0x10
-
-#define CMD_JOB 0x01
-
-#define CMD_SETADDRESS 0x00
-#define CMD_WRITE 0x01
-#define CMD_READ 0x02
-#define CMD_INACTIVE 0x03
-
-#define RESPONSE_CMD 0x00
-#define RESPONSE_JOB 0x80
 #define CRC5_MASK 0x1F
+
 
 static const u_int64_t BM1397_FREQUENCY = CONFIG_BM1397_FREQUENCY;
 static const u_int64_t BM1397_CORE_COUNT = 672;
@@ -67,7 +51,7 @@ typedef struct __attribute__((__packed__)) {
 
 void BM1397_init(u_int64_t frequency);
 
-void BM1397_send_work(job_packet *job);
+void BM1397_send_work(void *GLOBAL_STATE, bm_job *next_bm_job);
 void BM1397_set_job_difficulty_mask(int);
 int BM1397_set_max_baud(void);
 int BM1397_set_default_baud(void);

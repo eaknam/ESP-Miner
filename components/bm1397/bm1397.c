@@ -12,6 +12,28 @@
 #include "bm1397.h"
 #include "utils.h"
 #include "crc.h"
+#include "mining.h"
+#include "global_state.h"
+
+#define BM1397_RST_PIN  GPIO_NUM_1
+
+
+#define TYPE_JOB 0x20
+#define TYPE_CMD 0x40
+
+#define GROUP_SINGLE 0x00
+#define GROUP_ALL 0x10
+
+#define CMD_JOB 0x01
+
+#define CMD_SETADDRESS 0x00
+#define CMD_WRITE 0x01
+#define CMD_READ 0x02
+#define CMD_INACTIVE 0x03
+
+#define RESPONSE_CMD 0x00
+#define RESPONSE_JOB 0x80
+
 
 #define SLEEP_TIME 20
 #define FREQ_MULT 25.0
@@ -307,10 +329,46 @@ void BM1397_set_job_difficulty_mask(int difficulty){
 }
 
 
+static uint8_t id = 0;
+
+void BM1397_send_work(void *pvParameters, bm_job *next_bm_job) {
+
+        GlobalState *GLOBAL_STATE = (GlobalState*) pvParameters;
+
+        job_packet job;
+        // max job number is 128
+        // there is still some really weird logic with the job id bits for the asic to sort out
+        // so we have it limited to 128 and it has to increment by 4
+        id = (id + 4) % 128;
+
+        job.job_id = id;
+        job.num_midstates = next_bm_job->num_midstates;
+        memcpy(&job.starting_nonce, &next_bm_job->starting_nonce, 4);
+        memcpy(&job.nbits, &next_bm_job->target, 4);
+        memcpy(&job.ntime, &next_bm_job->ntime, 4);
+        memcpy(&job.merkle4, next_bm_job->merkle_root + 28, 4);
+        memcpy(job.midstate, next_bm_job->midstate, 32);
 
 
-void BM1397_send_work(job_packet *job) {
-    _send_BM1397((TYPE_JOB | GROUP_SINGLE | CMD_WRITE), (uint8_t*)job, sizeof(job_packet), false);
+        if (job.num_midstates == 4)
+        {
+            memcpy(job.midstate1, next_bm_job->midstate1, 32);
+            memcpy(job.midstate2, next_bm_job->midstate2, 32);
+            memcpy(job.midstate3, next_bm_job->midstate3, 32);
+        }
+
+        if (GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[job.job_id] != NULL) {
+            free_bm_job(GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[job.job_id]);
+        }
+
+        GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[job.job_id] = next_bm_job;
+
+        pthread_mutex_lock(&GLOBAL_STATE->valid_jobs_lock);
+        GLOBAL_STATE-> valid_jobs[job.job_id] = 1;
+        //ESP_LOGI(TAG, "Added Job: %i", job.job_id);
+        pthread_mutex_unlock(&GLOBAL_STATE->valid_jobs_lock);
+
+        _send_BM1397((TYPE_JOB | GROUP_SINGLE | CMD_WRITE), &job, sizeof(job_packet), false);
 }
 
 

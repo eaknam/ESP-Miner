@@ -17,7 +17,7 @@ typedef struct {
     asic_result * (*receive_work_fn)(void);
     int (*set_max_baud_fn)(void);
     void (*set_difficulty_mask_fn)(int);
-    void (*send_work_fn)(job_packet *job);
+    void (*send_work_fn)(void *GLOBAL_STATE, bm_job *next_bm_job);
 } AsicFunctions;
 
 typedef struct  {

@@ -38,7 +38,7 @@ void ASIC_result_task(void * pvParameters)
         uint8_t rx_midstate_index = job_id & 0x03;
 
         if (GLOBAL_STATE->valid_jobs[rx_job_id] == 0) {
-            ESP_LOGI(TAG, "Invalid job nonce found, id=%d", job_id);
+            ESP_LOGI(TAG, "Invalid job nonce found, id=%d", rx_job_id);
         }
 
         // ASIC may return the same nonce multiple times
