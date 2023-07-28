@@ -51,7 +51,7 @@ void ASIC_task(void * pvParameters)
 
         //Time to execute the above code is ~0.3ms
         //vTaskDelay((BM1397_FULLSCAN_MS - 0.3 ) / portTICK_RATE_MS);
-        vTaskDelay((10000 ) / portTICK_RATE_MS);
+        vTaskDelay((1000 ) / portTICK_RATE_MS);
 
     }
 }

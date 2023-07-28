@@ -60,25 +60,23 @@ void ASIC_result_task(void * pvParameters)
         }
 
         uint32_t rolled_version = GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version;
+        for (int i = 0; i < rx_midstate_index; i++) {
+            rolled_version = increment_bitmask(rolled_version, GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version_mask);
+        }
+
 
           printf("rx_midstate_index: 0x%x\n", rx_midstate_index);
           printf("midstate_num: 0x%x\n", asic_result->midstate_num);
           printf("nonce: 0x%x\n", nonce);
+          printf("rolled_version: 0x%x\n", rolled_version);
 
-
-
-
-
-        // for (int i = 0; i < rx_midstate_index; i++) {
-        //     rolled_version = increment_bitmask(rolled_version, GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version_mask);
-        // }
 
         // Combine the two 8-bit values to form a 16-bit value
-        uint16_t value2 = (uint16_t)((asic_result->version[0] << 8) | asic_result->version[1]);
+       // uint16_t value2 = (uint16_t)((asic_result->version[0] << 8) | asic_result->version[1]);
 
-        // // shift the 16 bit value left 13
-        rolled_version = (value2 << 16) | rolled_version;
-        printf("rolled_version: 0x%x\n", rolled_version);
+        // // // shift the 16 bit value left 13
+        // rolled_version = (value2 << 13) | rolled_version;
+        // printf("rolled_version: 0x%x\n", rolled_version);
 
 
 
