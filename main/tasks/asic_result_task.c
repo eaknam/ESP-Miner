@@ -35,8 +35,8 @@ void ASIC_result_task(void * pvParameters)
         uint32_t nonce = asic_result->nonce;
 
 
-        uint8_t rx_job_id = job_id & 0xfc;
-        uint8_t rx_midstate_index = job_id & 0x03;
+        uint8_t rx_job_id = job_id & 0xf8;
+        uint8_t rx_midstate_index = job_id & 0x6f;
 
         if (GLOBAL_STATE->valid_jobs[rx_job_id] == 0) {
             ESP_LOGI(TAG, "Invalid job nonce found, id=%d", rx_job_id);
@@ -65,7 +65,7 @@ void ASIC_result_task(void * pvParameters)
         uint16_t value2 = (uint16_t)((asic_result->version[0] << 8) | asic_result->version[1]);
 
         // shift the 16 bit value left 13
-        rolled_version = (value2 << 13) & rolled_version;
+        rolled_version = (value2 << 13) | rolled_version;
 
         //  rolled_version = rolled_version ^ test;
 

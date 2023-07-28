@@ -70,7 +70,7 @@ static void _init_system(SystemModule* module) {
 
     //Fan Tests
     EMC2101_init();
-    EMC2101_set_fan_speed(0.75);
+    EMC2101_set_fan_speed(1);
     vTaskDelay(500 / portTICK_RATE_MS);
 
     //oled
