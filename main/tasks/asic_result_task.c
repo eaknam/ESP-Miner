@@ -5,6 +5,7 @@
 #include <string.h>
 #include "esp_log.h"
 #include "nvs_config.h"
+#include "utils.h"
 
 const char * TAG = "asic_result";
 
@@ -32,6 +33,9 @@ void ASIC_result_task(void * pvParameters)
 
         uint8_t job_id = asic_result->job_id;
         uint32_t nonce = asic_result->nonce;
+
+        printf("Nonce: %u\n", nonce);
+
 
 
         uint8_t rx_job_id = job_id & 0xfc;
