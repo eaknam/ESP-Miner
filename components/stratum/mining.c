@@ -125,15 +125,15 @@ char * extranonce_2_generate(uint32_t extranonce_2, uint32_t length)
 static const double truediffone = 26959535291011309493156476344723991336010898738574164086137773096960.0;
 
 /* testing a nonce and return the diff - 0 means invalid */
-double test_nonce_value(const bm_job * job, const uint32_t nonce, const uint8_t midstate_index) {
+double test_nonce_value(const bm_job * job, const uint32_t nonce, const uint32_t rolled_version) {
 	double d64, s64, ds;
     unsigned char header[80];
 
-    // TODO: use the midstate hash instead of hashing the whole header
-    uint32_t rolled_version = job->version;
-    for (int i = 0; i < midstate_index; i++) {
-        rolled_version = increment_bitmask(rolled_version, job->version_mask);
-    }
+    // // TODO: use the midstate hash instead of hashing the whole header
+    // uint32_t rolled_version = job->version;
+    // for (int i = 0; i < midstate_index; i++) {
+    //     rolled_version = increment_bitmask(rolled_version, job->version_mask);
+    // }
 
     // copy data from job to header
     memcpy(header, &rolled_version, 4);

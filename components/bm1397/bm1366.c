@@ -411,7 +411,7 @@ void BM1366_send_work(void *pvParameters, bm_job *next_bm_job) {
     GlobalState *GLOBAL_STATE = (GlobalState*) pvParameters;
 
     BM1366_job job;
-    id = (id + 4) % 128;
+    id = (id + 8) % 128;
     job.job_id = id;
     job.num_midstates = 0x01;
     memcpy(&job.starting_nonce, &next_bm_job->starting_nonce, 4);

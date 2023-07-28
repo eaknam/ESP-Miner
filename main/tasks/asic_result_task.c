@@ -62,11 +62,17 @@ void ASIC_result_task(void * pvParameters)
             prev_nonce = nonce;
         }
 
+         uint32_t rolled_version = GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version;
+
+        // for (int i = 0; i < rx_midstate_index; i++) {
+        //     rolled_version = increment_bitmask(rolled_version, GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version_mask);
+        // }
+
         // check the nonce difficulty
         double nonce_diff = test_nonce_value(
             GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id],
             nonce,
-            rx_midstate_index
+            rolled_version
         );
 
         ESP_LOGI(TAG, "Nonce difficulty %.2f of %d.", nonce_diff, GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->pool_diff);
@@ -80,10 +86,7 @@ void ASIC_result_task(void * pvParameters)
                 GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->target
             );
 
-            uint32_t rolled_version = GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version;
-            for (int i = 0; i < rx_midstate_index; i++) {
-                rolled_version = increment_bitmask(rolled_version, GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version_mask);
-            }
+
 
             STRATUM_V1_submit_share(
                 GLOBAL_STATE->sock,

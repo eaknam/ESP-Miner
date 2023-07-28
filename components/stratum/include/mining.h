@@ -33,7 +33,7 @@ char * calculate_merkle_root_hash(const char * coinbase_tx, const uint8_t merkle
 
 bm_job construct_bm_job(mining_notify * params, const char * merkle_root, const uint32_t version_mask);
 
-double test_nonce_value(const bm_job * job, const uint32_t nonce, const uint8_t midstate_index);
+double test_nonce_value(const bm_job * job, const uint32_t nonce, const uint32_t rolled_version);
 
 char * extranonce_2_generate(uint32_t extranonce_2, uint32_t length);
 

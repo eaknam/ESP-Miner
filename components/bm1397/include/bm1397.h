@@ -46,6 +46,7 @@ typedef struct __attribute__((__packed__)) {
     uint32_t nonce;
     uint8_t midstate_num;
     uint8_t job_id;
+    uint8_t version[2];
     uint8_t crc;
 } asic_result;
 
