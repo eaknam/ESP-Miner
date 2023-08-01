@@ -87,7 +87,7 @@ static void _send_BM1366(uint8_t header, uint8_t * data, uint8_t data_len, bool 
     }
 
     //send serial data
-    SERIAL_send(buf, total_length, true);
+    SERIAL_send(buf, total_length, false);
 
     free(buf);
 }
@@ -95,7 +95,7 @@ static void _send_BM1366(uint8_t header, uint8_t * data, uint8_t data_len, bool 
 static void _send_simple(uint8_t * data, uint8_t total_length){
     unsigned char *buf = malloc(total_length);
    memcpy(buf, data, total_length);
-    SERIAL_send(buf, total_length, true);
+    SERIAL_send(buf, total_length, false);
 
     free(buf);
 }
@@ -411,13 +411,13 @@ void BM1366_send_work(void *pvParameters, bm_job *next_bm_job) {
     GlobalState *GLOBAL_STATE = (GlobalState*) pvParameters;
 
     BM1366_job job;
-    id = (id + 8) % 128;
+    id = (id + 24) % 128;
     job.job_id = id;
     job.num_midstates = 0x01;
     memcpy(&job.starting_nonce, &next_bm_job->starting_nonce, 4);
     memcpy(&job.nbits, &next_bm_job->target, 4);
     memcpy(&job.ntime, &next_bm_job->ntime, 4);
-    memcpy(job.merkle_root, next_bm_job->midstate1, 32);
+    memcpy(job.merkle_root, next_bm_job->merkle_root_be, 32);
     memcpy(job.prev_block_hash, next_bm_job->prev_block_hash_be, 32);
     memcpy(&job.version, &next_bm_job->version, 4);
 
@@ -442,10 +442,6 @@ asic_result * BM1366_receive_work(void){
         //wait for a response, wait time is pretty arbitrary
         int received = SERIAL_rx(asic_response_buffer, 11, 60000);
 
-
-       printf("<-");
-        prettyHex((unsigned char*)asic_response_buffer, received);
-        printf("\n");
 
         if (received < 0) {
             ESP_LOGI(TAG, "Error in serial RX");

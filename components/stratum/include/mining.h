@@ -10,6 +10,7 @@ typedef struct {
     uint8_t prev_block_hash[32];
     uint8_t prev_block_hash_be[32];
     uint8_t merkle_root[32];
+    uint8_t merkle_root_be[32];
     uint32_t ntime;
     uint32_t target; // aka difficulty, aka nbits
     uint32_t starting_nonce;

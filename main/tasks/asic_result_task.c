@@ -35,6 +35,7 @@ void ASIC_result_task(void * pvParameters)
         uint32_t nonce = asic_result->nonce;
 
 
+
         uint8_t rx_job_id = job_id & 0xf8;
         uint8_t rx_midstate_index = job_id & 0x07;
 
@@ -59,29 +60,15 @@ void ASIC_result_task(void * pvParameters)
             prev_nonce = nonce;
         }
 
-        uint32_t rolled_version = GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version;
+         uint32_t rolled_version = GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version;
         for (int i = 0; i < rx_midstate_index; i++) {
             rolled_version = increment_bitmask(rolled_version, GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version_mask);
         }
 
 
-          printf("rx_midstate_index: 0x%x\n", rx_midstate_index);
-          printf("midstate_num: 0x%x\n", asic_result->midstate_num);
-          printf("nonce: 0x%x\n", nonce);
-          printf("rolled_version: 0x%x\n", rolled_version);
-
-
-        // Combine the two 8-bit values to form a 16-bit value
-       // uint16_t value2 = (uint16_t)((asic_result->version[0] << 8) | asic_result->version[1]);
-
         // // // shift the 16 bit value left 13
-        // rolled_version = (value2 << 13) | rolled_version;
+        // rolled_version = (asic_result->version << 13) | rolled_version;
         // printf("rolled_version: 0x%x\n", rolled_version);
-
-
-
-
-
 
         // check the nonce difficulty
         double nonce_diff = test_nonce_value(

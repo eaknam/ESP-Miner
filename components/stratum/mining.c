@@ -64,14 +64,14 @@ bm_job construct_bm_job(mining_notify * params, const char * merkle_root, const 
 
     hex2bin(merkle_root, new_job.merkle_root, 32);
 
-
+    //hex2bin(merkle_root, new_job.merkle_root_be, 32);
+    swap_endian_words(merkle_root, new_job.merkle_root_be);
+    reverse_bytes(new_job.merkle_root_be, 32);
 
     swap_endian_words(params->prev_block_hash, new_job.prev_block_hash);
-    swap_endian_words(params->prev_block_hash, new_job.prev_block_hash_be);
+
+    hex2bin(params->prev_block_hash, new_job.prev_block_hash_be, 32);
     reverse_bytes(new_job.prev_block_hash_be, 32);
-
-       // memcpy(new_job.prev_block_hash_be,  params->prev_block_hash, 32);
-
 
     ////make the midstate hash
     uint8_t midstate_data[64];
