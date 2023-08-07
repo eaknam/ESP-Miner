@@ -31,6 +31,8 @@ void ASIC_result_task(void * pvParameters)
             continue;
         }
 
+         ESP_LOGI(TAG, "TEST");
+
         uint8_t job_id = asic_result->job_id;
         uint32_t nonce = asic_result->nonce;
 
@@ -60,15 +62,16 @@ void ASIC_result_task(void * pvParameters)
             prev_nonce = nonce;
         }
 
-         uint32_t rolled_version = GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version;
-        for (int i = 0; i < rx_midstate_index; i++) {
-            rolled_version = increment_bitmask(rolled_version, GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version_mask);
-        }
+        uint32_t rolled_version = GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version;
+        // for (int i = 0; i < rx_midstate_index; i++) {
+        //     rolled_version = increment_bitmask(rolled_version, GLOBAL_STATE->ASIC_TASK_MODULE.active_jobs[rx_job_id]->version_mask);
+        // }
 
 
         // // // shift the 16 bit value left 13
-        // rolled_version = (asic_result->version << 13) | rolled_version;
-        // printf("rolled_version: 0x%x\n", rolled_version);
+        rolled_version = (asic_result->version << 5) | rolled_version;
+        printf("asic_result->version: 0x%x\n", asic_result->version);
+        printf("rolled_version: 0x%x\n", rolled_version);
 
         // check the nonce difficulty
         double nonce_diff = test_nonce_value(
