@@ -9,7 +9,7 @@ menu "Bitaxe Configuration"
 
     config BM1397_DOMAIN_COUNT
         int "Voltage Domain count"
-        range 3
+        range 1 3
         default 1
         help
             The voltage domains count
@@ -23,10 +23,11 @@ menu "Bitaxe Configuration"
 
     config BM1397_ASIC_COUNT
         int "ASIC count in the chain"
-        range 6
+        range 1 6
         default 1
         help
             The BM1397 count the the chain
+
 endmenu
 
 menu "Stratum Configuration"
