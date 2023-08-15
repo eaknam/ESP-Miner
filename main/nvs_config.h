@@ -11,6 +11,8 @@
 #define NVS_CONFIG_STRATUM_PASS "stratumpass"
 #define NVS_CONFIG_BM1397_FREQ "bm1397frequency"
 #define NVS_CONFIG_BM1397_VOLTAGE "bm1397voltage"
+#define NVS_CONFIG_BM1397_ASIC_COUNT "bm1397asiccount"
+#define NVS_CONFIG_BM1397_DOMAIN_COUNT "bm1397domaincount"
 
 char * nvs_config_get_string(const char * key, const char * default_value);
 uint16_t nvs_config_get_u16(const char * key, const uint16_t default_value);

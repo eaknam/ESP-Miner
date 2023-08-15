@@ -184,8 +184,8 @@ static void _send_init(u_int64_t frequency) {
     vTaskDelay(SLEEP_TIME / portTICK_RATE_MS);
     _send_chain_inactive();
 
-    for (int i = 0; i < BM1397_COUNT; i++) {
-        _set_chip_address(i*(256/BM1397_COUNT));
+    for (int i = 0; i < BM1397_ASIC_COUNT; i++) {
+        _set_chip_address(i*(256/BM1397_ASIC_COUNT));
     }
 
     unsigned char init[6] = {0x00, CLOCK_ORDER_CONTROL_0, 0x00, 0x00, 0x00, 0x00}; //init1 - clock_order_control0
