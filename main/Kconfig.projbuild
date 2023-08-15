@@ -13,6 +13,13 @@ menu "Bitaxe Configuration"
         default 250
         help
             The BM1397 hash frequency
+        
+    config BM1397_COUNT
+        int "ASIC count in the chain"
+        range 6
+        default 1
+        help
+            The BM1397 count the the chain
 endmenu
 
 menu "Stratum Configuration"
